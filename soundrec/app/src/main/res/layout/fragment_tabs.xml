@@ -7,10 +7,12 @@
 
     <Button android:layout_width="match_parent" android:layout_height="match_parent"
         android:layout_weight="0.5"
+        android:id="@+id/recordScreenButton"
         android:text="rec screen"/>
 
     <Button android:layout_width="match_parent" android:layout_height="match_parent"
         android:layout_weight="0.5"
+        android:id="@+id/browseScreenButton"
         android:text="browse screen"/>
 
 </LinearLayout>

@@ -1,26 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="projects.mprog.nl.soundrec.RecordingFragment"
-        android:id="@+id/fragment"
+        android:name="projects.mprog.nl.soundrec.MainFragment"
+        android:id="@+id/fragmentRecord"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.8" />
+        android:layout_weight="0.9" />
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name="projects.mprog.nl.soundrec.TabsFragment"
-        android:id="@+id/fragment2"
+        android:id="@+id/fragmentBrowse"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.2" />
+        android:layout_weight="0.1" />
 
 </LinearLayout>
