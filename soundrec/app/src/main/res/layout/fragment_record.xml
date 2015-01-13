@@ -1,14 +1,55 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="projects.mprog.nl.soundrec.RecordFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_weight="0.5"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RECORD"
-        android:id="@+id/button"
-        android:layout_gravity="center" />
-</FrameLayout>
+        android:orientation="vertical"
+        android:id="@+id/topRecord"
+        android:gravity="center">
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:text="THIS WILL SHOW THE TIME..."
+            />
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="0.5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/bottomRecord"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RECORD"
+            android:id="@+id/recordButton" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="stop Recording"
+            android:id="@+id/stopRecordingButton" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play file"
+            android:id="@+id/playFileButton" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop playing"
+            android:id="@+id/stopFileButton" />
+    </LinearLayout>
+
+</LinearLayout>

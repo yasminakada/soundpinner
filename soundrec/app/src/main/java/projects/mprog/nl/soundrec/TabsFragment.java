@@ -12,8 +12,8 @@ import android.widget.Button;
 
 
 public class TabsFragment extends Fragment implements View.OnClickListener {
-    Button recButton;
-    Button browseButton;
+    Button recTab;
+    Button browseTab;
     FragmentManager manager;
 
     public void setManager(FragmentManager manager){
@@ -30,12 +30,12 @@ public class TabsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recButton = (Button) getActivity().findViewById(R.id.recordScreenButton);
-        recButton.setOnClickListener(this);
-        recButton.setBackgroundColor(0xFF9A9494);
-        browseButton = (Button) getActivity().findViewById(R.id.browseScreenButton);
-        browseButton.setOnClickListener(this);
-        browseButton.setBackgroundColor(0xFFC1B9B9);
+        recTab = (Button) getActivity().findViewById(R.id.recordScreenButton);
+        recTab.setOnClickListener(this);
+        recTab.setBackgroundColor(0xFF9A9494);
+        browseTab = (Button) getActivity().findViewById(R.id.browseScreenButton);
+        browseTab.setOnClickListener(this);
+        browseTab.setBackgroundColor(0xFFC1B9B9);
 
     }
 
@@ -50,15 +50,15 @@ public class TabsFragment extends Fragment implements View.OnClickListener {
             if (!(frag instanceof RecordFragment)) {
                 RecordFragment rf = new RecordFragment();
                 manager.beginTransaction().replace(R.id.fragment_container_top,rf ).commit();
-                recButton.setBackgroundColor(0xFF9A9494);
-                browseButton.setBackgroundColor(0xFFC1B9B9);
+                recTab.setBackgroundColor(0xFF9A9494);
+                browseTab.setBackgroundColor(0xFFC1B9B9);
             }
         }else if (clickedItem == R.id.browseScreenButton){
             if (!(frag instanceof BrowseFragment)) {
                 BrowseFragment bf = new BrowseFragment();
                 manager.beginTransaction().replace(R.id.fragment_container_top,bf ).commit();
-                browseButton.setBackgroundColor(0xFF9A9494);
-                recButton.setBackgroundColor(0xFFC1B9B9);
+                browseTab.setBackgroundColor(0xFF9A9494);
+                recTab.setBackgroundColor(0xFFC1B9B9);
             }
         }
         Log.d("TEST", " ONCLICK");
@@ -68,8 +68,8 @@ public class TabsFragment extends Fragment implements View.OnClickListener {
 
     }
     public void clearTabs(){
-        recButton.setBackgroundColor(0xFFC1B9B9);
-        browseButton.setBackgroundColor(0xFFC1B9B9);
+        recTab.setBackgroundColor(0xFFC1B9B9);
+        browseTab.setBackgroundColor(0xFFC1B9B9);
 
     }
 }
