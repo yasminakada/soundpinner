@@ -16,16 +16,20 @@ import android.widget.MediaController;
 import java.io.File;
 import java.io.IOException;
 
-public class RecordFragment extends Fragment implements View.OnClickListener{
+public class RecordFragment extends Fragment implements View.OnClickListener {
     private MediaRecorder recorder;
     private MediaPlayer mediaPlayer;
     private MediaController mediaContoller;
     private String OUTPUT_FILE;
 
     Button recButton;
-    Button stopRecButton;
     Button playButton;
-    Button stopPlaybackButton;
+
+
+    //TODO: Using media controller?
+    //TODO: Storing every file and keeping track of name and place.
+    //TODO: Time counter.
+    //TODO: All strings for setting a buttons text should be a constant/variable.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,48 +44,46 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
 
         recButton = (Button) getActivity().findViewById(R.id.recordButton);
         recButton.setOnClickListener(this);
-        stopRecButton = (Button) getActivity().findViewById(R.id.stopRecordingButton);
-        stopRecButton.setOnClickListener(this);
-        playButton = (Button) getActivity().findViewById(R.id.playFileButton);
+        playButton = (Button) getActivity().findViewById(R.id.playBackButton);
         playButton.setOnClickListener(this);
-        stopPlaybackButton= (Button) getActivity().findViewById(R.id.stopFileButton);
-        stopPlaybackButton.setOnClickListener(this);
+
 
         // TODO: have the user enter a name for the file
         // and store this in a array? and on device.
-        OUTPUT_FILE = Environment.getExternalStorageDirectory()+"/audiorecorder.3gpp";
+        Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        OUTPUT_FILE = Environment.getExternalStorageDirectory() + "/audiorecorder.3gpp";
     }
 
     @Override
     public void onClick(View v) {
-        Log.d("TEST", "ONCLICK in REDORD has been called");
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.recordButton:
-                try{
-                    Log.d("TEST", "Start Recording");
-                    beginRecording();
-                }catch(Exception e){
-                    Log.d("TEST", "--Exception recording caught. :" + e.getMessage());
-                }break;
-            case R.id.stopRecordingButton:
-                try{
-                    Log.d("TEST", "Stop Recording");
-                    stopRecording();
-                }catch(Exception e){
-                    Log.d("TEST", "--Exception stop recording caught. :" + e.getMessage());
-                }break;
-            case R.id.playFileButton:
-                try{
-                    playRecording();
-                }catch(Exception e){
-                    Log.d("TEST", "--Exception play recording caught. :" + e.getMessage());
-                }break;
-            case R.id.stopFileButton:
-                try{
-                    stopPlayback();
-                }catch(Exception e){
-                    Log.d("TEST", "--Exception stop playing caught. :" + e.getMessage());
-                }break;
+                try {
+                    if (recButton.getText().equals("RECORD"))
+                        beginRecording();
+                    else if (recButton.getText().equals("STOP"))
+                        stopRecording();
+                } catch (Exception e) {
+                    Log.d("TEST", "--Exception beginRecording caught. :" + e.getMessage());
+                }
+                break;
+            case R.id.playBackButton:
+                try {
+                    if (playButton.getText().equals("LISTEN"))
+                        playRecording();
+                    else if (playButton.getText().equals("STOP"))
+                        stopPlayback();
+                } catch (Exception e) {
+                    Log.d("TEST", "--Exception playRecording caught. :" + e.getMessage());
+                }
+                break;
+//            case R.id.stopFileButton:
+//                try {
+//                    stopPlayback();
+//                } catch (Exception e) {
+//                    Log.d("TEST", "--Exception stopPlayback caught. :" + e.getMessage());
+//                }
+//                break;
         }
     }
 
@@ -89,28 +91,31 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
         clearMediaRecorder();
         File outFile = new File(OUTPUT_FILE);
 
-        if(outFile.exists())
+        if (outFile.exists())
             outFile.delete();
 
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        // TODO: setAudioEncoder to NB when low api and WB when high api.
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         recorder.setOutputFile(OUTPUT_FILE);
         recorder.prepare();
         recorder.start();
+        recButton.setText("STOP");
     }
 
     private void clearMediaRecorder() {
         // TODO: remove option of recording while already recording!
-        if(recorder != null)
+        if (recorder != null)
             recorder.release();
     }
 
     private void stopRecording() {
         // TODO: Give user option to save file with chosen filename
-        if(recorder != null)
+        if (recorder != null)
             recorder.stop();
+        recButton.setText("RECORD");
     }
 
     private void playRecording() throws IOException {
@@ -119,13 +124,14 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
         mediaPlayer.setDataSource(OUTPUT_FILE);
         mediaPlayer.prepare();
         mediaPlayer.start();
+        playButton.setText("STOP");
     }
 
     private void clearMediaPlayer() {
-        if (mediaPlayer != null){
-            try{
+        if (mediaPlayer != null) {
+            try {
                 mediaPlayer.release();
-            }catch(Exception e){
+            } catch (Exception e) {
                 Log.d("TEST", "--Exception clear mediaplayer caught. :" + e.getMessage());
             }
         }

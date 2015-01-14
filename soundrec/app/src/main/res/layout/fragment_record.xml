@@ -36,20 +36,9 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="stop Recording"
-            android:id="@+id/stopRecordingButton" />
+            android:text="LISTEN"
+            android:id="@+id/playBackButton" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Play file"
-            android:id="@+id/playFileButton" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stop playing"
-            android:id="@+id/stopFileButton" />
     </LinearLayout>
 
 </LinearLayout>
