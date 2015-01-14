@@ -30,6 +30,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     //TODO: Storing every file and keeping track of name and place.
     //TODO: Time counter.
     //TODO: All strings for setting a buttons text should be a constant/variable.
+    //
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
