@@ -1,5 +1,6 @@
 package projects.mprog.nl.soundrec;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -16,11 +17,16 @@ import android.widget.MediaController;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Yasmina Kada
+ * Programming Project 2015
+ * 10001567
+ */
 public class RecordFragment extends Fragment implements View.OnClickListener {
     private MediaRecorder recorder;
     private MediaPlayer mediaPlayer;
     private MediaController mediaContoller;
-    private String OUTPUT_FILE;
+    private String outputFile;
 
     Button recButton;
     Button playButton;
@@ -30,6 +36,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     //TODO: Storing every file and keeping track of name and place.
     //TODO: Time counter.
     //TODO: All strings for setting a buttons text should be a constant/variable.
+    //TODO: When app is closed while recording, recording should stop/
+    // when onPause go on in background?
     //
 
     @Override
@@ -48,15 +56,15 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         playButton = (Button) getActivity().findViewById(R.id.playBackButton);
         playButton.setOnClickListener(this);
 
-
         // TODO: have the user enter a name for the file
         // and store this in a array? and on device.
-        Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-        OUTPUT_FILE = Environment.getExternalStorageDirectory() + "/audiorecorder.3gpp";
+//        Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+//        outputFile = Environment.getExternalStorageDirectory() + "/audiorecorder.3gpp";
     }
 
     @Override
     public void onClick(View v) {
+        getAllFilesStored();
         switch (v.getId()) {
             case R.id.recordButton:
                 try {
@@ -78,29 +86,24 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                     Log.d("TEST", "--Exception playRecording caught. :" + e.getMessage());
                 }
                 break;
-//            case R.id.stopFileButton:
-//                try {
-//                    stopPlayback();
-//                } catch (Exception e) {
-//                    Log.d("TEST", "--Exception stopPlayback caught. :" + e.getMessage());
-//                }
-//                break;
         }
     }
 
     private void beginRecording() throws IOException {
         clearMediaRecorder();
-        File outFile = new File(OUTPUT_FILE);
-
-        if (outFile.exists())
-            outFile.delete();
+        getNewOutputPath();
+//        if (outFile.exists())
+//            outFile.delete();
 
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        // TODO: setAudioEncoder to NB when low api and WB when high api.
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setOutputFile(OUTPUT_FILE);
+        // setAudioEncoder to NB when low api and WB when high api.
+        if (android.os.Build.VERSION.SDK_INT < 10)
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        else
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
+        recorder.setOutputFile(outputFile);
         recorder.prepare();
         recorder.start();
         recButton.setText("STOP");
@@ -122,10 +125,16 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private void playRecording() throws IOException {
         clearMediaPlayer();
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setDataSource(OUTPUT_FILE);
+        mediaPlayer.setDataSource(outputFile);
         mediaPlayer.prepare();
         mediaPlayer.start();
         playButton.setText("STOP");
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer arg0) {
+                    playButton.setText("LISTEN");
+            }
+        });
     }
 
     private void clearMediaPlayer() {
@@ -139,7 +148,33 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     private void stopPlayback() {
-        if (mediaPlayer != null)
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
+            playButton.setText("LISTEN");
+        }
     }
+
+    // User can rename files , check if name doesn't exist already
+    private void saveFileAs() {
+    }
+
+    public void getNewOutputPath() {
+        outputFile = FileConstruct.getOutputPath();
+    }
+
+    public File[] getAllFilesStored(){
+        String path = Environment.getExternalStorageDirectory()+"/SoundPinner";
+        Log.d("FILES", "+++++++++++++++++++++++++++++");
+        Log.d("FILES", "Path: " + path);
+        File f = new File(path);
+        File file[] = f.listFiles();
+        Log.d("FILES", "Size: "+ file.length);
+        for (int i=0; i < file.length; i++)
+        {
+            Log.d("FILES", "FileName:" + file[i].getName());
+        }
+        Log.d("FILES", "+++++++++++++++++++++++++++++");
+        return file;
+    }
+
 }

@@ -5,7 +5,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-
+/**
+ * Yasmina Kada
+ * Programming Project 2015
+ * 10001567
+ */
 public class MainActivity extends FragmentActivity{
 
     @Override
@@ -23,6 +27,9 @@ public class MainActivity extends FragmentActivity{
         ft.add(R.id.fragment_container_bottom, tabsFragment);
 
         ft.commit();
+
+        FileConstruct.getDate();
+        FileConstruct.createMainDirectory();
     }
 
 }

@@ -10,7 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
+/**
+ * Yasmina Kada
+ * Programming Project 2015
+ * 10001567
+ */
 public class TabsFragment extends Fragment implements View.OnClickListener {
     Button recTab;
     Button browseTab;
