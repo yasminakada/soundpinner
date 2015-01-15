@@ -5,40 +5,55 @@
     tools:context="projects.mprog.nl.soundrec.RecordFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_weight="0.5"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:id="@+id/topRecord"
         android:gravity="center">
-        <TextView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="THIS WILL SHOW THE TIME..."
-            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <Chronometer
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:id="@+id/chronometer" />
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_weight="0.5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/bottomRecord"
-        android:gravity="center">
-
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RECORD"
-            android:id="@+id/recordButton" />
+            android:orientation="horizontal"
+            android:id="@+id/bottomRecord"
+            android:gravity="center"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LISTEN"
-            android:id="@+id/playBackButton" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RECORD"
+                android:id="@+id/recordButton" />
 
-    </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LISTEN"
+                android:id="@+id/playBackButton" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

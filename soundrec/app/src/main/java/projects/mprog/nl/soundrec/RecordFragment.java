@@ -1,10 +1,10 @@
 package projects.mprog.nl.soundrec;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.MediaController;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Yasmina Kada
@@ -23,6 +26,7 @@ import java.io.IOException;
  * 10001567
  */
 public class RecordFragment extends Fragment implements View.OnClickListener {
+    private boolean isTimerRunning = false;
     private MediaRecorder recorder;
     private MediaPlayer mediaPlayer;
     private MediaController mediaContoller;
@@ -30,7 +34,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     Button recButton;
     Button playButton;
-
+    Chronometer chronometer;
 
     //TODO: Using media controller?
     //TODO: Storing every file and keeping track of name and place.
@@ -55,6 +59,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         recButton.setOnClickListener(this);
         playButton = (Button) getActivity().findViewById(R.id.playBackButton);
         playButton.setOnClickListener(this);
+        chronometer = (Chronometer) getActivity().findViewById(R.id.chronometer);
 
         // TODO: have the user enter a name for the file
         // and store this in a array? and on device.
@@ -106,6 +111,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         recorder.setOutputFile(outputFile);
         recorder.prepare();
         recorder.start();
+        // chronometer starts counting...
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
         recButton.setText("STOP");
     }
 
@@ -119,7 +127,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         // TODO: Give user option to save file with chosen filename
         if (recorder != null)
             recorder.stop();
+        chronometer.stop();
         recButton.setText("RECORD");
+        Log.d("TEST", "+++RECORDINGTIME: " + chronometer.getText());
     }
 
     private void playRecording() throws IOException {
@@ -160,6 +170,14 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     public void getNewOutputPath() {
         outputFile = FileConstruct.getOutputPath();
+    }
+
+    protected void startTimer() {
+
+    }
+
+    public void resetTimer(){
+
     }
 
     public File[] getAllFilesStored(){
