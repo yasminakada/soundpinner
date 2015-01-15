@@ -137,6 +137,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setDataSource(outputFile);
         mediaPlayer.prepare();
+        Log.d("TEST", "DURATION"+ mediaPlayer.getDuration());
         mediaPlayer.start();
         playButton.setText("STOP");
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
