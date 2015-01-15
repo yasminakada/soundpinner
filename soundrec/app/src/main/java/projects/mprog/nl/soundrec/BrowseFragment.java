@@ -1,6 +1,7 @@
 package projects.mprog.nl.soundrec;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +53,7 @@ public class BrowseFragment extends Fragment implements AdapterView.OnItemClickL
         } catch (IOException e) {
             e.printStackTrace();
         }
+        list.setOnItemClickListener(this);
     }
 
     public File[] getAllFilesStored(){
@@ -109,7 +112,12 @@ public class BrowseFragment extends Fragment implements AdapterView.OnItemClickL
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         File[] files = getAllFilesStored();
         File fileClicked = files[position];
-        // popup some fragment with playing possibilities.
+
+        TextView tv = (TextView) view.findViewById(R.id.fileName);
+
+        Intent i = new Intent(getActivity(),ListenActivity.class);
+        startActivity(i);
+        // popup some fragment with playing possibilities and name changing possibilities.
 
     }
 }
