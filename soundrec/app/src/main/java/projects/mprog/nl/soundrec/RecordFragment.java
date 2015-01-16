@@ -173,14 +173,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         outputFile = FileConstruct.getOutputPath();
     }
 
-    protected void startTimer() {
-
-    }
-
-    public void resetTimer(){
-
-    }
-
     public File[] getAllFilesStored(){
         String path = Environment.getExternalStorageDirectory()+"/SoundPinner";
         Log.d("FILES", "+++++++++++++++++++++++++++++");

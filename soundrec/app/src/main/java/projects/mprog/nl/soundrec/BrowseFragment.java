@@ -34,6 +34,7 @@ public class BrowseFragment extends Fragment implements AdapterView.OnItemClickL
     String[] itemNames;
     String[] itemDuration;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,12 +111,14 @@ public class BrowseFragment extends Fragment implements AdapterView.OnItemClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        File[] files = getAllFilesStored();
-        File fileClicked = files[position];
 
         TextView tv = (TextView) view.findViewById(R.id.fileName);
+        String fileName = (String) tv.getText();
 
         Intent i = new Intent(getActivity(),ListenActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("fileName",fileName);
+        i.putExtras(bundle);
         startActivity(i);
         // popup some fragment with playing possibilities and name changing possibilities.
 
@@ -212,7 +215,6 @@ class BrowseListAdapter extends BaseAdapter{
         }
 
     }
-
 
     @Override
     public int getCount() {
