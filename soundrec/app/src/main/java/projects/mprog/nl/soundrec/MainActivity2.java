@@ -47,7 +47,7 @@ public class MainActivity2 extends FragmentActivity{
                 .setIndicator("BROWSE",
                         res.getDrawable(R.drawable.browse_tab_selector)),BrowseFragment.class,null);
 
-//        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Browse"),
+//        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Browse"),g
 //                BrowseFragment.class, null);
     }
 }

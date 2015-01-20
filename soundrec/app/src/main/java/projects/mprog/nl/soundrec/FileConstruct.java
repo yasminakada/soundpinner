@@ -45,4 +45,19 @@ public class FileConstruct {
                + "/SoundPinner/" + getNewFileName();
        return output;
     }
+
+    // Rename a file.
+    // If a name already exists, add a number to the name.
+    public static void renameFile(File file, String newName){
+        String newNameExtended = newName + ".3gpp";
+        File newFile = new File(file.getParent(),newNameExtended);
+        if (newFile.exists()){
+            int counter = 1;
+            while(newFile.exists()){
+                newFile = new File(file.getParent(),newName +"(" + counter + ")" + ".3gpp");
+                counter++;
+            }
+        }
+        file.renameTo(newFile);
+    }
 }
