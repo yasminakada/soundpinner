@@ -56,8 +56,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
 
         recButton = (Button) getActivity().findViewById(R.id.recordButton);
+        recButton.setBackgroundResource(R.drawable.mic_circle_grey_256);
         recButton.setOnClickListener(this);
         playButton = (Button) getActivity().findViewById(R.id.playBackButton);
+        playButton.setBackgroundResource(R.drawable.play_48);
         playButton.setOnClickListener(this);
         chronometer = (Chronometer) getActivity().findViewById(R.id.chronometer);
 
@@ -114,7 +116,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         // chronometer starts counting...
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
+        //button bg change
         recButton.setText("STOP");
+        recButton.setBackgroundResource(R.drawable.mic_circle_red_256);
     }
 
     private void clearMediaRecorder() {
@@ -130,6 +134,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         chronometer.stop();
         recButton.setText("RECORD");
         Log.d("TEST", "+++RECORDINGTIME: " + chronometer.getText());
+        recButton.setBackgroundResource(R.drawable.mic_circle_grey_256);
     }
 
     private void playRecording() throws IOException {
@@ -140,12 +145,18 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         Log.d("TEST", "DURATION"+ mediaPlayer.getDuration());
         mediaPlayer.start();
         playButton.setText("STOP");
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+        playButton.setBackgroundResource(R.drawable.stop_48);
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer arg0) {
                     playButton.setText("LISTEN");
+                    chronometer.stop();
+                    playButton.setBackgroundResource(R.drawable.play_48);
             }
         });
+
     }
 
     private void clearMediaPlayer() {
@@ -162,6 +173,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             playButton.setText("LISTEN");
+            chronometer.stop();
         }
     }
 
