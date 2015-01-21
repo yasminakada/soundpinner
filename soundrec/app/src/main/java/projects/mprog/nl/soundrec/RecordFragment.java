@@ -25,6 +25,7 @@ import java.util.TimerTask;
  * Programming Project 2015
  * 10001567
  */
+
 public class RecordFragment extends Fragment implements View.OnClickListener {
     private boolean isTimerRunning = false;
     private MediaRecorder recorder;

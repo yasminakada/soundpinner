@@ -14,10 +14,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.os.Handler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.LogRecord;
 
 
 public class ListenActivity extends Activity implements View.OnClickListener {
@@ -34,6 +37,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
     boolean isPaused = false;
     String[] invalidCharacters = {};
     boolean isEditting = false;
+    SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,54 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         s = s.replace(".3gpp", "");
 //        fileNameEditText.setText(s);
         fileNameEditText.setVisibility(View.INVISIBLE);
+    }
+
+    public void setSeekBar() {
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        seekBar.setMax(mediaPlayer.getDuration());
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                if(mediaPlayer != null){
+                    int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                    seekBar.setProgress(mCurrentPosition);
+                }
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(mediaPlayer != null && fromUser) {
+                    mediaPlayer.seekTo(progress * 1000);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+    }
+
+    public void setMediaPlayer() {
+        clearMediaPlayer();
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(file.getAbsolutePath());
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            Log.d("TEST", e.getMessage());
+        }
     }
 
     @Override
@@ -138,10 +190,8 @@ public class ListenActivity extends Activity implements View.OnClickListener {
             isPaused = false;
             Log.d("TEST", "PLAY AFTER PAUSED");
         } else {
-            clearMediaPlayer();
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(file.getAbsolutePath());
-            mediaPlayer.prepare();
+            setMediaPlayer();
+            setSeekBar();
             mediaPlayer.start();
             playPauseButton.setImageResource(R.drawable.pause_48);
             isPlaying = true;

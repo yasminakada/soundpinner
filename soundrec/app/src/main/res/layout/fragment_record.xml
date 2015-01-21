@@ -29,6 +29,7 @@
                 android:padding="40dp"
                 android:textSize="34sp"
                 android:id="@+id/chronometer" />
+
         </LinearLayout>
 
         <LinearLayout
