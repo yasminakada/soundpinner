@@ -5,11 +5,8 @@ import android.app.Service;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,24 +17,26 @@ import android.os.Handler;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.LogRecord;
 
 
 public class ListenActivity extends Activity implements View.OnClickListener {
+
     String path = Environment.getExternalStorageDirectory() + "/SoundPinner/";
     String fileName;
     File file;
+
     MediaPlayer mediaPlayer;
+    SeekBar seekBar;
+
     ImageButton playPauseButton;
     ImageButton stopButton;
     TextView fileNameTextView;
     EditText fileNameEditText;
     ImageView imageEdit;
+
     boolean isPlaying = false;
     boolean isPaused = false;
-    String[] invalidCharacters = {};
     boolean isEditting = false;
-    SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,55 +45,65 @@ public class ListenActivity extends Activity implements View.OnClickListener {
 
         fileName = getIntent().getExtras().getString("fileName");
         file = new File(path + fileName);
-        setViewFileName();
-        setFileNameEditText();
+        findViews();
         setAllOnClickListeners();
+        setInitialInterface();
+
+        setMediaPlayer();
+        setSeekBar();
+        seekUpdate();
     }
 
-    public void setViewFileName() {
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+
+        @Override
+        public void run() {
+            if (mediaPlayer != null) {
+                seekUpdate();
+            }
+        }
+    };
+
+    public void seekUpdate() {
+        seekBar.setProgress(mediaPlayer.getCurrentPosition());
+        handler.postDelayed(runnable, 1000);
+    }
+
+    // getting views from xml
+    private void findViews() {
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+
+        playPauseButton = (ImageButton) findViewById(R.id.playPauseButton);
+        stopButton = (ImageButton) findViewById(R.id.stopButton);
+
+        fileNameEditText = (EditText) findViewById(R.id.fileNameEditText);
         fileNameTextView = (TextView) findViewById(R.id.fileNameTextView);
+
+        imageEdit = (ImageView) findViewById(R.id.imageEdit);
+    }
+
+    // initial settings for the interface
+    private void setInitialInterface() {
         fileNameTextView.setText(fileName);
+
+        fileNameEditText.setVisibility(View.INVISIBLE);
     }
 
     public void setAllOnClickListeners() {
-        playPauseButton = (ImageButton) findViewById(R.id.playPauseButton);
         playPauseButton.setOnClickListener(this);
-        stopButton = (ImageButton) findViewById(R.id.stopButton);
         stopButton.setOnClickListener(this);
-        imageEdit = (ImageView) findViewById(R.id.imageEdit);
         imageEdit.setOnClickListener(this);
         fileNameTextView.setOnClickListener(this);
     }
 
-    public void setFileNameEditText() {
-        fileNameEditText = (EditText) findViewById(R.id.fileNameEditText);
-        String s = (String) fileNameTextView.getText();
-        s = s.replace(".3gpp", "");
-//        fileNameEditText.setText(s);
-        fileNameEditText.setVisibility(View.INVISIBLE);
-    }
-
     public void setSeekBar() {
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
         seekBar.setMax(mediaPlayer.getDuration());
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-                if(mediaPlayer != null){
-                    int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
-                    seekBar.setProgress(mCurrentPosition);
-                }
-                handler.postDelayed(this, 1000);
-            }
-        };
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(mediaPlayer != null && fromUser) {
-                    mediaPlayer.seekTo(progress * 1000);
+                if (mediaPlayer != null && fromUser) {
+                    mediaPlayer.seekTo(progress);
                 }
             }
 
@@ -122,28 +131,37 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private void clearMediaPlayer() {
+        if (mediaPlayer != null) {
+            try {
+                mediaPlayer.release();
+            } catch (Exception e) {
+                Log.d("TEST", "--Exception clear mediaplayer caught. :" + e.getMessage());
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.playPauseButton:
-                if (!isPlaying || isPaused) try {
+                // not playing or paused will lead to recording being played.
+                // else recording will be paused
+                if (!isPlaying || isPaused) {
                     Log.d("TEST", "play");
                     playRecording();
-                } catch (IOException e) {
-                    Log.d("TEST", "Exception on click: " + e.getMessage());
+                } else if (isPlaying) {
+                    pausePlayback();
+                    Log.d("TEST", "pause");
                 }
-                else pausePlayback();
-                Log.d("TEST", "pause");
                 break;
+
             case R.id.stopButton:
                 Log.d("TEST", "stop");
                 stopPlayback();
                 break;
-            case R.id.fileNameTextView:
-                // rename via FileConstruct
-                break;
+
             case R.id.imageEdit:
-                // some
                 if (!isEditting) {
                     enableEdit();
                 } else {
@@ -152,6 +170,50 @@ public class ListenActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
+
+    private void playRecording() {
+        if (isPaused) {
+            mediaPlayer.start();
+            isPaused = false;
+            Log.d("TEST", "PLAY AFTER PAUSED");
+        } else {
+            setMediaPlayer();
+            mediaPlayer.start();
+            playPauseButton.setImageResource(R.drawable.pause_48);
+            isPlaying = true;
+            Log.d("TEST", "PLAY FROM START");
+        }
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer arg0) {
+                Log.d("TEST", "PLAYBACK FINISHED");
+                playPauseButton.setImageResource(R.drawable.play_48);
+                isPlaying = false;
+            }
+        });
+
+    }
+
+
+    private void pausePlayback() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            isPaused = true;
+            playPauseButton.setImageResource(R.drawable.play_48);
+        }
+    }
+
+    private void stopPlayback() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            isPlaying = false;
+            isPaused = false;
+            playPauseButton.setImageResource(R.drawable.play_48);
+            Log.d("TEST", "STOP PLAYBACK");
+        }
+    }
+
 
     private void disableEdit() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -177,66 +239,12 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         fileNameTextView.setVisibility(View.INVISIBLE);
         fileNameEditText.setVisibility(View.VISIBLE);
         String s = (String) fileNameTextView.getText();
-        s = s.replace(".3gpp","");
+        s = s.replace(".3gpp", "");
         fileNameEditText.setText("");
         fileNameEditText.append(s);
         fileNameEditText.requestFocus();
         imm.showSoftInput(fileNameEditText, 0);
     }
 
-    private void playRecording() throws IOException {
-        if (isPaused) {
-            mediaPlayer.start();
-            isPaused = false;
-            Log.d("TEST", "PLAY AFTER PAUSED");
-        } else {
-            setMediaPlayer();
-            setSeekBar();
-            mediaPlayer.start();
-            playPauseButton.setImageResource(R.drawable.pause_48);
-            isPlaying = true;
-            Log.d("TEST", "PLAY FROM START");
-        }
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer arg0) {
-                Log.d("TEST", "PLAYBACK FINISHED");
-                playPauseButton.setImageResource(R.drawable.play_48);
-                isPlaying = false;
-            }
-        });
-
-    }
-
-    private void clearMediaPlayer() {
-        if (mediaPlayer != null) {
-            try {
-                mediaPlayer.release();
-            } catch (Exception e) {
-                Log.d("TEST", "--Exception clear mediaplayer caught. :" + e.getMessage());
-            }
-        }
-    }
-
-    private void pausePlayback() {
-        if (mediaPlayer != null) {
-            if (isPlaying) {
-                mediaPlayer.pause();
-                isPaused = true;
-                playPauseButton.setImageResource(R.drawable.play_48);
-            }
-        }
-
-    }
-
-    private void stopPlayback() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            isPlaying = false;
-            isPaused = false;
-            playPauseButton.setImageResource(R.drawable.play_48);
-            Log.d("TEST", "STOP PLAYBACK");
-        }
-    }
 
 }
