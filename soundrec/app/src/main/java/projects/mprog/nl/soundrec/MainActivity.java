@@ -1,12 +1,14 @@
 package projects.mprog.nl.soundrec;
 
-import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Build;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Display;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -19,59 +21,33 @@ import android.widget.FrameLayout;
 public class MainActivity extends FragmentActivity{
     int scrWidth = 0;
     int scrHeight = 0;
-    TabsFragment tabsFragment;
-    RecordFragment recordFragment;
+
+    // Fragment TabHost as mTabHost
+    private FragmentTabHost mTabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
-        tabsFragment = new TabsFragment();
-        recordFragment = new RecordFragment();
+        Resources res = getResources();
 
-        setScreenDimensions();
-        setFragmentContainersDimensions();
-        setFragmentsView();
-        FileConstruct.createMainDirectory();
+        mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+
+//        mTabHost.addTab(mTabHost.newTabSpec("tab1").setIndicator("Record",getResources().getDrawable(R.drawable.record_tab_selector)),
+//                RecordFragment.class, null);
+        mTabHost.addTab(mTabHost
+                .newTabSpec("RecordTab")
+                .setIndicator("RECORD",
+                        res.getDrawable(R.drawable.record_tab_selector)),RecordFragment.class,null);
+        mTabHost.addTab(mTabHost
+                .newTabSpec("BrowseTab")
+                .setIndicator("BROWSE",
+                        res.getDrawable(R.drawable.browse_tab_selector)),BrowseFragment.class,null);
+
+//        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Browse"),g
+//                BrowseFragment.class, null);
     }
-    public void setScreenDimensions() {
-        // Getting the screen size of the device
-        if (Build.VERSION.SDK_INT >= 13) {
-            Display display = getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            scrWidth = size.x;
-            scrHeight = size.y;
-        } else {
-            Display display = getWindowManager().getDefaultDisplay();
-            scrWidth = display.getWidth();
-            scrHeight = display.getHeight();
-        }
-    }
-
-    public void setFragmentsView(){
-        FragmentManager manager = getSupportFragmentManager();
-        tabsFragment.setManager(manager);
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.add(R.id.fragment_container_top, recordFragment);
-        ft.add(R.id.fragment_container_bottom, tabsFragment);
-
-        ft.commit();
-    }
-
-    public void setFragmentContainersDimensions(){
-        if (scrHeight > 0) {
-            FrameLayout topContainer = (FrameLayout) findViewById(R.id.fragment_container_top);
-            FrameLayout bottomContainer = (FrameLayout) findViewById(R.id.fragment_container_bottom);
-
-            ViewGroup.LayoutParams params = topContainer.getLayoutParams();
-            params.height =(scrHeight / 5) * 4;
-
-            params = bottomContainer.getLayoutParams();
-            params.height =(scrHeight / 5);
-
-        }
-    }
-
 }

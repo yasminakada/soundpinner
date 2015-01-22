@@ -1,7 +1,9 @@
 package projects.mprog.nl.soundrec;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,6 +35,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
     TextView fileNameTextView;
     EditText fileNameEditText;
     ImageView imageEdit;
+    ImageView imageDelete;
 
     boolean isPlaying = false;
     boolean isPaused = false;
@@ -81,6 +84,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         fileNameTextView = (TextView) findViewById(R.id.fileNameTextView);
 
         imageEdit = (ImageView) findViewById(R.id.imageEdit);
+        imageDelete = (ImageView) findViewById(R.id.imageDelete);
     }
 
     // initial settings for the interface
@@ -94,6 +98,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         playPauseButton.setOnClickListener(this);
         stopButton.setOnClickListener(this);
         imageEdit.setOnClickListener(this);
+        imageDelete.setOnClickListener(this);
         fileNameTextView.setOnClickListener(this);
     }
 
@@ -168,9 +173,11 @@ public class ListenActivity extends Activity implements View.OnClickListener {
                     disableEdit();
                 }
                 break;
+            case R.id.imageDelete:
+                deleteFile();
+                break;
         }
     }
-
 
     private void playRecording() {
         if (isPaused) {
@@ -195,7 +202,6 @@ public class ListenActivity extends Activity implements View.OnClickListener {
 
     }
 
-
     private void pausePlayback() {
         if (mediaPlayer != null) {
             mediaPlayer.pause();
@@ -213,7 +219,6 @@ public class ListenActivity extends Activity implements View.OnClickListener {
             Log.d("TEST", "STOP PLAYBACK");
         }
     }
-
 
     private void disableEdit() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -244,6 +249,25 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         fileNameEditText.append(s);
         fileNameEditText.requestFocus();
         imm.showSoftInput(fileNameEditText, 0);
+    }
+
+    private void deleteFile(){new AlertDialog.Builder(this)
+            .setTitle("Delete recording")
+            .setMessage("Are you sure you want to delete this recording: " + fileName + " ?")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    file.delete();
+                    finish();
+                }
+            })
+            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // do nothing
+                }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+
     }
 
 

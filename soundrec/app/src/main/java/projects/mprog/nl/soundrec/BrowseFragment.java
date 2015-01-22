@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,7 +120,10 @@ public class BrowseFragment extends Fragment implements AdapterView.OnItemClickL
         Bundle bundle = new Bundle();
         bundle.putString("fileName",fileName);
         i.putExtras(bundle);
+        TabHost host = (TabHost) getActivity().findViewById(android.R.id.tabhost);
+        host.setCurrentTab(0);
         startActivity(i);
+
         // popup some fragment with playing possibilities and name changing possibilities.
 
     }

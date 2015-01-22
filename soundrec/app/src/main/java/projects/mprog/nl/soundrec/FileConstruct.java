@@ -60,4 +60,8 @@ public class FileConstruct {
         }
         file.renameTo(newFile);
     }
+
+    public static void deleteFile(File file){
+        file.delete();
+    }
 }
