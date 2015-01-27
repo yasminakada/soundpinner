@@ -3,7 +3,6 @@ package projects.mprog.nl.soundrec;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,6 @@ import android.widget.MediaController;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Yasmina Kada
@@ -31,15 +28,14 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private MediaRecorder recorder;
     private MediaPlayer mediaPlayer;
     private MediaController mediaContoller;
-    private String outputFile;
+    private String outputPath;
+
+    File file;
 
     Button recButton;
     Button playButton;
     Chronometer chronometer;
 
-    //TODO: Using media controller?
-    //TODO: Storing every file and keeping track of name and place.
-    //TODO: Time counter.
     //TODO: All strings for setting a buttons text should be a constant/variable.
     //TODO: When app is closed while recording, recording should stop/
     // when onPause go on in background?
@@ -59,20 +55,20 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         recButton = (Button) getActivity().findViewById(R.id.recordButton);
         recButton.setBackgroundResource(R.drawable.mic_circle_grey_256);
         recButton.setOnClickListener(this);
+
         playButton = (Button) getActivity().findViewById(R.id.playBackButton);
         playButton.setBackgroundResource(R.drawable.play_48);
         playButton.setOnClickListener(this);
+
         chronometer = (Chronometer) getActivity().findViewById(R.id.chronometer);
 
         // TODO: have the user enter a name for the file
         // and store this in a array? and on device.
-//        Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-//        outputFile = Environment.getExternalStorageDirectory() + "/audiorecorder.3gpp";
     }
 
     @Override
     public void onClick(View v) {
-        getAllFilesStored();
+
         switch (v.getId()) {
             case R.id.recordButton:
                 try {
@@ -99,24 +95,26 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     private void beginRecording() throws IOException {
         clearMediaRecorder();
-        getNewOutputPath();
-//        if (outFile.exists())
-//            outFile.delete();
+        outputPath = FileConstruct.getOutputPath();
+        file = new File(outputPath);
 
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+
         // setAudioEncoder to NB when low api and WB when high api.
         if (android.os.Build.VERSION.SDK_INT < 10)
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         else
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
-        recorder.setOutputFile(outputFile);
+        recorder.setOutputFile(outputPath);
         recorder.prepare();
         recorder.start();
+
         // chronometer starts counting...
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
+
         //button bg change
         recButton.setText("STOP");
         recButton.setBackgroundResource(R.drawable.mic_circle_red_256);
@@ -129,21 +127,26 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     private void stopRecording() {
-        // TODO: Give user option to save file with chosen filename
         if (recorder != null)
             recorder.stop();
         chronometer.stop();
+
+        android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
+        RenameDialogFragment dialog = new RenameDialogFragment();
+        dialog.setFile(file);
+        dialog.show(manager,"dialog");
+
         recButton.setText("RECORD");
-        Log.d("TEST", "+++RECORDINGTIME: " + chronometer.getText());
         recButton.setBackgroundResource(R.drawable.mic_circle_grey_256);
+
     }
 
     private void playRecording() throws IOException {
         clearMediaPlayer();
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setDataSource(outputFile);
+        mediaPlayer.setDataSource(outputPath);
         mediaPlayer.prepare();
-        Log.d("TEST", "DURATION"+ mediaPlayer.getDuration());
+
         mediaPlayer.start();
         playButton.setText("STOP");
         chronometer.setBase(SystemClock.elapsedRealtime());
@@ -152,9 +155,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer arg0) {
-                    playButton.setText("LISTEN");
-                    chronometer.stop();
-                    playButton.setBackgroundResource(R.drawable.play_48);
+                playButton.setText("LISTEN");
+                chronometer.stop();
+                playButton.setBackgroundResource(R.drawable.play_48);
             }
         });
 
@@ -177,28 +180,4 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             chronometer.stop();
         }
     }
-
-    // User can rename files , check if name doesn't exist already
-    private void saveFileAs() {
-    }
-
-    public void getNewOutputPath() {
-        outputFile = FileConstruct.getOutputPath();
-    }
-
-    public File[] getAllFilesStored(){
-        String path = Environment.getExternalStorageDirectory()+"/SoundPinner";
-        Log.d("FILES", "+++++++++++++++++++++++++++++");
-        Log.d("FILES", "Path: " + path);
-        File f = new File(path);
-        File file[] = f.listFiles();
-        Log.d("FILES", "Size: "+ file.length);
-        for (int i=0; i < file.length; i++)
-        {
-            Log.d("FILES", "FileName:" + file[i].getName());
-        }
-        Log.d("FILES", "+++++++++++++++++++++++++++++");
-        return file;
-    }
-
 }

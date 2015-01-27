@@ -13,7 +13,7 @@ import java.util.Calendar;
  * 10001567
  */
 public class FileConstruct {
-    // new filename should be rec-25jan2015-1.3gpp
+
     public static String getDate(){
         Calendar c = Calendar.getInstance();
         Log.d("TEST", "Current time => " + c.getTime());
@@ -30,6 +30,13 @@ public class FileConstruct {
         return fileName;
     }
 
+    public static String getMainDirectory(){
+        String s = Environment.getExternalStorageDirectory()
+                + "/SoundPinner/";
+        return s;
+
+    }
+
     public static void createMainDirectory(){
         String folder_main = "SoundPinner";
 
@@ -40,6 +47,7 @@ public class FileConstruct {
             f.mkdirs();
         }
     }
+
     public static String getOutputPath(){
        String output = Environment.getExternalStorageDirectory()
                + "/SoundPinner/" + getNewFileName();

@@ -36,8 +36,6 @@ public class MainActivity extends FragmentActivity{
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 
-//        mTabHost.addTab(mTabHost.newTabSpec("tab1").setIndicator("Record",getResources().getDrawable(R.drawable.record_tab_selector)),
-//                RecordFragment.class, null);
         mTabHost.addTab(mTabHost
                 .newTabSpec("RecordTab")
                 .setIndicator("RECORD",
@@ -47,7 +45,5 @@ public class MainActivity extends FragmentActivity{
                 .setIndicator("BROWSE",
                         res.getDrawable(R.drawable.browse_tab_selector)),BrowseFragment.class,null);
 
-//        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Browse"),g
-//                BrowseFragment.class, null);
     }
 }
