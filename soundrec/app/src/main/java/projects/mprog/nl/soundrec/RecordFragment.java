@@ -68,8 +68,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
         manager = getActivity().getSupportFragmentManager();
 
-        // TODO: have the user enter a name for the file
-        // and store this in a array? and on device.
     }
 
     @Override
@@ -132,7 +130,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     private void clearMediaRecorder() {
-        // TODO: remove option of recording while already recording!
         if (recorder != null)
             recorder.release();
     }

@@ -65,6 +65,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         setSeekBar();
         seekUpdate();
 
+        elapsedTimeText.setText(getTimeString(0));
         durationText.setText(getTimeString(mediaPlayer.getDuration()));
     }
 
@@ -141,7 +142,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("TEST", "Progress elapsed: " + getTimeString(progress));
+//                Log.d("TEST", "Progress elapsed: " + getTimeString(progress));
                 elapsedTimeText.setText(getTimeString(progress));
                 if (mediaPlayer != null && fromUser) {
                     mediaPlayer.seekTo(progress);
@@ -221,6 +222,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
             mediaPlayer.start();
             isPaused = false;
             Log.d("TEST", "PLAY AFTER PAUSED");
+            playPauseButton.setImageResource(R.drawable.pause_48);
         } else {
             setMediaPlayer();
             mediaPlayer.start();
@@ -268,6 +270,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         if (!newName.equals(fileNameTextView.getText())) {
             FileConstruct.renameFile(file, newName);
             fileNameTextView.setText(newName + ".3gpp");
+            file = new File(file.getParent(),newName + ".3gpp");
         }
 
     }
