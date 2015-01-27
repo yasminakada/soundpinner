@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,12 +21,13 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.os.Handler;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 
 
-public class ListenActivity extends Activity implements View.OnClickListener {
+public class ListenActivity extends Activity implements View.OnClickListener,TextView.OnEditorActionListener {
 
     String path = Environment.getExternalStorageDirectory() + "/SoundPinner/";
     String fileName;
@@ -130,6 +133,7 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         imageEdit.setOnClickListener(this);
         imageDelete.setOnClickListener(this);
         fileNameTextView.setOnClickListener(this);
+        fileNameEditText.setOnEditorActionListener(this);
     }
 
     public void setSeekBar() {
@@ -142,11 +146,16 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                Log.d("TEST", "Progress elapsed: " + getTimeString(progress));
+                Log.d("TEST", "++++++++++changed seekbar!");
+                Log.d("TEST", "is playing? " + isPlaying);
+                Log.d("TEST", "is fromUser? " + fromUser);
                 elapsedTimeText.setText(getTimeString(progress));
                 if (mediaPlayer != null && fromUser) {
                     mediaPlayer.seekTo(progress);
-
+                    if (!isPlaying) {
+                        isPaused = true;
+                        
+                    }
                 }
             }
 
@@ -157,7 +166,6 @@ public class ListenActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
@@ -256,21 +264,38 @@ public class ListenActivity extends Activity implements View.OnClickListener {
             isPaused = false;
             playPauseButton.setImageResource(R.drawable.play_48);
             Log.d("TEST", "STOP PLAYBACK");
+            setMediaPlayer();
         }
     }
 
     private void disableEdit() {
+
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
         isEditting = false;
         imageEdit.setImageResource(R.drawable.edit_32);
         fileNameTextView.setVisibility(View.VISIBLE);
         fileNameEditText.setVisibility(View.INVISIBLE);
         imm.hideSoftInputFromWindow(fileNameEditText.getWindowToken(), 0);
-        String newName = fileNameEditText.getText().toString();
+        final String newName = fileNameEditText.getText().toString();
         if (!newName.equals(fileNameTextView.getText())) {
-            FileConstruct.renameFile(file, newName);
-            fileNameTextView.setText(newName + ".3gpp");
-            file = new File(file.getParent(),newName + ".3gpp");
+            new AlertDialog.Builder(this)
+                    .setTitle("Rename file?")
+                    .setMessage("Are you sure you want to rename this recording to  " + newName + " ?")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            FileConstruct.renameFile(file, newName);
+                            fileNameTextView.setText(newName + ".3gpp");
+                            file = new File(file.getParent(),newName + ".3gpp");
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
         }
 
     }
@@ -327,4 +352,14 @@ public class ListenActivity extends Activity implements View.OnClickListener {
     }
 
 
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        Log.d("Test", "Keyboard key has been clicked " + actionId);
+        Log.d("TEST", "IMEACTIONDONE id: " + EditorInfo.IME_ACTION_DONE);
+        if (actionId == EditorInfo.IME_ACTION_DONE){
+            disableEdit();
+            return true;
+        }
+        return false;
+    }
 }
