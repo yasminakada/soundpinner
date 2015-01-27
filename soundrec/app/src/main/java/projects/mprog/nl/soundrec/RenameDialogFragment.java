@@ -19,7 +19,7 @@ public class RenameDialogFragment extends DialogFragment {
     String message = "Give this recording a name.";
     EditText editText;
     String oldFilename = "";
-    File file;
+    File oldFile;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -27,16 +27,16 @@ public class RenameDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_rename,null);
         editText = (EditText) view.findViewById(R.id.editTextRenameDialog);
+        editText.setText("");
+        editText.append(oldFilename);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(message)
+        builder.setTitle("Rename file")
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String filename = editText.getText().toString();
-                        filename += ".3gpp";
-                        Log.d("TEST" , "++++++ new name: " + filename);
-                        FileConstruct.renameFile(file,filename);
+                        FileConstruct.renameFile(oldFile,filename);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -49,12 +49,8 @@ public class RenameDialogFragment extends DialogFragment {
         return builder.create();
     }
     public void setFile(File file){
-
+        oldFile = file;
         oldFilename = file.getName();
-        file = new File(FileConstruct.getMainDirectory()+ oldFilename);
-        oldFilename.replace(".3gpp", "");
-        Log.d("TEST", "+++++++++ old filename: "+ oldFilename);
-        editText.setText("");
-        editText.append(oldFilename);
+        oldFilename = oldFilename.replace(".3gpp", "");
     }
 }

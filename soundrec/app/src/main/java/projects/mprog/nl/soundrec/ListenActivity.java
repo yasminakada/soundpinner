@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
+import android.graphics.Point;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -33,6 +36,8 @@ public class ListenActivity extends Activity implements View.OnClickListener {
     ImageButton playPauseButton;
     ImageButton stopButton;
     TextView fileNameTextView;
+    TextView elapsedTimeText;
+    TextView durationText;
     EditText fileNameEditText;
     ImageView imageEdit;
     ImageView imageDelete;
@@ -40,6 +45,8 @@ public class ListenActivity extends Activity implements View.OnClickListener {
     boolean isPlaying = false;
     boolean isPaused = false;
     boolean isEditting = false;
+    private int scrWidth;
+    private int scrHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +59,28 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         setAllOnClickListeners();
         setInitialInterface();
 
+        setScreenDimensions();
+
         setMediaPlayer();
         setSeekBar();
         seekUpdate();
+
+        durationText.setText(getTimeString(mediaPlayer.getDuration()));
+    }
+
+    private void setScreenDimensions() {
+        // Getting the screen size of the device
+        if (Build.VERSION.SDK_INT >= 13) {
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            scrWidth = size.x;
+            scrHeight = size.y;
+        } else {
+            Display display = getWindowManager().getDefaultDisplay();
+            scrWidth = display.getWidth();
+            scrHeight = display.getHeight();
+        }
     }
 
     Handler handler = new Handler();
@@ -83,6 +109,9 @@ public class ListenActivity extends Activity implements View.OnClickListener {
         fileNameEditText = (EditText) findViewById(R.id.fileNameEditText);
         fileNameTextView = (TextView) findViewById(R.id.fileNameTextView);
 
+        elapsedTimeText = (TextView) findViewById(R.id.elapsedTimeListen);
+        durationText = (TextView) findViewById(R.id.durationListen);
+
         imageEdit = (ImageView) findViewById(R.id.imageEdit);
         imageDelete = (ImageView) findViewById(R.id.imageDelete);
     }
@@ -103,12 +132,20 @@ public class ListenActivity extends Activity implements View.OnClickListener {
     }
 
     public void setSeekBar() {
+        int seekWidth = (scrWidth/5) * 4;
+
+        android.view.ViewGroup.LayoutParams param = seekBar
+                .getLayoutParams();
+        param.width = seekWidth;
         seekBar.setMax(mediaPlayer.getDuration());
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d("TEST", "Progress elapsed: " + getTimeString(progress));
+                elapsedTimeText.setText(getTimeString(progress));
                 if (mediaPlayer != null && fromUser) {
                     mediaPlayer.seekTo(progress);
+
                 }
             }
 
@@ -268,6 +305,22 @@ public class ListenActivity extends Activity implements View.OnClickListener {
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show();
 
+    }
+    private String getTimeString(long millis) {
+        StringBuffer buf = new StringBuffer();
+
+        int hours = (int) (millis / (1000 * 60 * 60));
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+
+        buf
+                .append(String.format("%02d", hours))
+                .append(":")
+                .append(String.format("%02d", minutes))
+                .append(":")
+                .append(String.format("%02d", seconds));
+
+        return buf.toString();
     }
 
 

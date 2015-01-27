@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     Button playButton;
     Chronometer chronometer;
 
+    FragmentManager manager;
+    RenameDialogFragment dialog;
+
     //TODO: All strings for setting a buttons text should be a constant/variable.
     //TODO: When app is closed while recording, recording should stop/
     // when onPause go on in background?
@@ -62,6 +66,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
         chronometer = (Chronometer) getActivity().findViewById(R.id.chronometer);
 
+        manager = getActivity().getSupportFragmentManager();
+
         // TODO: have the user enter a name for the file
         // and store this in a array? and on device.
     }
@@ -77,7 +83,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                     else if (recButton.getText().equals("STOP"))
                         stopRecording();
                 } catch (Exception e) {
-                    Log.d("TEST", "--Exception beginRecording caught. :" + e.getMessage());
+                    Log.d("TEST", "--Exception Recording caught. :" + e.getMessage());
                 }
                 break;
             case R.id.playBackButton:
@@ -87,7 +93,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                     else if (playButton.getText().equals("STOP"))
                         stopPlayback();
                 } catch (Exception e) {
-                    Log.d("TEST", "--Exception playRecording caught. :" + e.getMessage());
+                    Log.d("TEST", "--Exception playRecording caught. :" + e.getStackTrace());
                 }
                 break;
         }
@@ -118,6 +124,11 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         //button bg change
         recButton.setText("STOP");
         recButton.setBackgroundResource(R.drawable.mic_circle_red_256);
+
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        dialog = new RenameDialogFragment();
+        Log.d("TEST",file.getAbsolutePath());
+        dialog.setFile(file);
     }
 
     private void clearMediaRecorder() {
@@ -131,9 +142,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             recorder.stop();
         chronometer.stop();
 
-        android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
-        RenameDialogFragment dialog = new RenameDialogFragment();
-        dialog.setFile(file);
         dialog.show(manager,"dialog");
 
         recButton.setText("RECORD");

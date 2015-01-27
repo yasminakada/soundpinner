@@ -19,9 +19,6 @@ import android.widget.FrameLayout;
  * 10001567
  */
 public class MainActivity extends FragmentActivity{
-    int scrWidth = 0;
-    int scrHeight = 0;
-
     // Fragment TabHost as mTabHost
     private FragmentTabHost mTabHost;
 
