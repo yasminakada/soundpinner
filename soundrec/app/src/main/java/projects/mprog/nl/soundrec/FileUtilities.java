@@ -12,7 +12,7 @@ import java.util.Calendar;
  * Programming Project 2015
  * 10001567
  */
-public class FileConstruct {
+public class FileUtilities {
 
     public static String getDate(){
         Calendar c = Calendar.getInstance();

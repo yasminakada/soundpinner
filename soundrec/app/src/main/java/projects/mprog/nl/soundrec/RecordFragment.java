@@ -99,7 +99,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     private void beginRecording() throws IOException {
         clearMediaRecorder();
-        outputPath = FileConstruct.getOutputPath();
+        outputPath = FileUtilities.getOutputPath();
         file = new File(outputPath);
 
         recorder = new MediaRecorder();

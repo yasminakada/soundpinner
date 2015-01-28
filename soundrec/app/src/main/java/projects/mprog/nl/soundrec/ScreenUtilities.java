@@ -5,7 +5,7 @@ import android.content.res.Resources;
 /**
  * Created by yasmina on 27-1-2015.
  */
-public class ScreenConstruct {
+public class ScreenUtilities {
     // Calculates dp to px.
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);

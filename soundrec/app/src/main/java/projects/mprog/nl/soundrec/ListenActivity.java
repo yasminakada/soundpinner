@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.os.Handler;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
 
     boolean isPlaying = false;
     boolean isPaused = false;
-    boolean isEditting = false;
+    boolean isEditing = false;
     private int scrWidth;
     private int scrHeight;
 
@@ -154,7 +153,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
                     mediaPlayer.seekTo(progress);
                     if (!isPlaying) {
                         isPaused = true;
-                        
+
                     }
                 }
             }
@@ -213,7 +212,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
                 break;
 
             case R.id.imageEdit:
-                if (!isEditting) {
+                if (!isEditing) {
                     enableEdit();
                 } else {
                     disableEdit();
@@ -271,7 +270,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
     private void disableEdit() {
 
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
-        isEditting = false;
+        isEditing = false;
         imageEdit.setImageResource(R.drawable.edit_32);
         fileNameTextView.setVisibility(View.VISIBLE);
         fileNameEditText.setVisibility(View.INVISIBLE);
@@ -283,7 +282,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
                     .setMessage("Are you sure you want to rename this recording to  " + newName + " ?")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            FileConstruct.renameFile(file, newName);
+                            FileUtilities.renameFile(file, newName);
                             fileNameTextView.setText(newName + ".3gpp");
                             file = new File(file.getParent(),newName + ".3gpp");
                         }
@@ -304,7 +303,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         // enables renaming the file.
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
 
-        isEditting = true;
+        isEditing = true;
         imageEdit.setImageResource(R.drawable.check_32);
         fileNameTextView.setVisibility(View.INVISIBLE);
         fileNameEditText.setVisibility(View.VISIBLE);
