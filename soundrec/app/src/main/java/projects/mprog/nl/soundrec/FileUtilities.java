@@ -14,34 +14,33 @@ import java.util.Calendar;
  */
 public class FileUtilities {
 
+    // Used to auto-generate unique filenames.
     public static String getDate(){
         Calendar c = Calendar.getInstance();
-        Log.d("TEST", "Current time => " + c.getTime());
 
         SimpleDateFormat df = new SimpleDateFormat("ddMMyyyy-HHmmss");
         String formattedDate = df.format(c.getTime());
         formattedDate = formattedDate.replace(".","");
-        Log.d("TEST", "Formatted time => " + formattedDate);
         return formattedDate;
     }
 
-    public static String getNewFileName(){
-        String fileName = "REC-"+ getDate()+ ".3gpp";
-        return fileName;
+    // Auto-generate a filename.
+    public static String getNewFilename(){
+        String filename = "REC-"+ getDate()+ ".3gpp";
+        return filename;
     }
 
     public static String getMainDirectory(){
-        String s = Environment.getExternalStorageDirectory()
+        String dir = Environment.getExternalStorageDirectory()
                 + "/SoundPinner/";
-        return s;
-
+        return dir;
     }
 
+    // Creates a new main directory when it does not exist.
     public static void createMainDirectory(){
         String folder_main = "SoundPinner";
 
         File f = new File(Environment.getExternalStorageDirectory(),folder_main);
-        Log.d("TEST","directory exists: "+ f.isDirectory());
         if (!f.exists()) {
             Log.d("TEST", "+++++ MADE NEW DIRECTORY ++++");
             f.mkdirs();
@@ -50,12 +49,11 @@ public class FileUtilities {
 
     public static String getOutputPath(){
        String output = Environment.getExternalStorageDirectory()
-               + "/SoundPinner/" + getNewFileName();
+               + "/SoundPinner/" + getNewFilename();
        return output;
     }
 
-    // Rename a file.
-    // If a name already exists, add a number to the name.
+    // Handles renaming of files. Checks for files so no file will be overwritten with the same name.
     public static void renameFile(File file, String newName){
         String newNameExtended = newName + ".3gpp";
         File newFile = new File(file.getParent(),newNameExtended);
@@ -71,5 +69,10 @@ public class FileUtilities {
 
     public static void deleteFile(File file){
         file.delete();
+    }
+
+    // Removes the ".3gpp" extention from a string.
+    public static String stripFilename(String filename){
+        return filename.replace(".3gpp", "");
     }
 }

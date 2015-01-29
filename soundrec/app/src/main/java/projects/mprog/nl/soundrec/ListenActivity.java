@@ -340,12 +340,11 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
         int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
 
-        buf
-                .append(String.format("%02d", hours))
-                .append(":")
-                .append(String.format("%02d", minutes))
-                .append(":")
-                .append(String.format("%02d", seconds));
+        buf.append(String.format("%02d", hours))
+           .append(":")
+           .append(String.format("%02d", minutes))
+           .append(":")
+           .append(String.format("%02d", seconds));
 
         return buf.toString();
     }
@@ -353,8 +352,6 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        Log.d("Test", "Keyboard key has been clicked " + actionId);
-        Log.d("TEST", "IMEACTIONDONE id: " + EditorInfo.IME_ACTION_DONE);
         if (actionId == EditorInfo.IME_ACTION_DONE){
             disableEdit();
             return true;

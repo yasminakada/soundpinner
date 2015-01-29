@@ -23,7 +23,7 @@ public class BrowseListAdapter extends BaseAdapter {
         context = c;
         list = new ArrayList<ListItem>();
         File[] files = ListUtilities.getAllFilesStored();
-        String[] fileNames = ListUtilities.getAllFileNames(files);
+        String[] fileNames = ListUtilities.getAllFilenames(files);
         String[] fileDurations = ListUtilities.getAllDurations(files);
         for (int i=0; i < files.length; i++)
         {
@@ -57,7 +57,7 @@ public class BrowseListAdapter extends BaseAdapter {
         ImageView img = (ImageView) item.findViewById(R.id.image);
 
         ListItem temp = list.get(position);
-        fileName.setText(temp.fileName);
+        fileName.setText(FileUtilities.stripFilename(temp.fileName));
         fileDuration.setText(temp.fileDuration);
         img.setImageResource(R.drawable.music_icon_64);
         return item;
