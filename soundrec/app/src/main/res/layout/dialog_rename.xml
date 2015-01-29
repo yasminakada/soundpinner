@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set the name for the recording:"
+        android:text="@string/rename_dialog_message"
         android:id="@+id/textView"
         android:textSize="16sp"
         android:padding="10dp"

@@ -26,6 +26,12 @@ import java.io.File;
 import java.io.IOException;
 
 
+/**
+ * Yasmina Kada
+ * Programming Project 2015
+ * 10001567
+ */
+
 public class ListenActivity extends Activity implements View.OnClickListener,TextView.OnEditorActionListener {
 
     String path = Environment.getExternalStorageDirectory() + "/SoundPinner/";
@@ -119,7 +125,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         imageDelete = (ImageView) findViewById(R.id.imageDelete);
     }
 
-    // initial settings for the interface
+    // Initial settings for the interface
     private void setInitialInterface() {
         fileNameTextView.setText(fileName);
 
@@ -145,9 +151,6 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("TEST", "++++++++++changed seekbar!");
-                Log.d("TEST", "is playing? " + isPlaying);
-                Log.d("TEST", "is fromUser? " + fromUser);
                 elapsedTimeText.setText(getTimeString(progress));
                 if (mediaPlayer != null && fromUser) {
                     mediaPlayer.seekTo(progress);
@@ -186,7 +189,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
             try {
                 mediaPlayer.release();
             } catch (Exception e) {
-                Log.d("TEST", "--Exception clear mediaplayer caught. :" + e.getMessage());
+                Log.d("TEST", "-- Caught exception while releasing mediaplayer: " + e.getMessage());
             }
         }
     }
@@ -198,16 +201,13 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
                 // not playing or paused will lead to recording being played.
                 // else recording will be paused
                 if (!isPlaying || isPaused) {
-                    Log.d("TEST", "play");
                     playRecording();
                 } else if (isPlaying) {
                     pausePlayback();
-                    Log.d("TEST", "pause");
                 }
                 break;
 
             case R.id.stopButton:
-                Log.d("TEST", "stop");
                 stopPlayback();
                 break;
 
@@ -228,19 +228,17 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         if (isPaused) {
             mediaPlayer.start();
             isPaused = false;
-            Log.d("TEST", "PLAY AFTER PAUSED");
             playPauseButton.setImageResource(R.drawable.pause_48);
         } else {
             setMediaPlayer();
             mediaPlayer.start();
             playPauseButton.setImageResource(R.drawable.pause_48);
             isPlaying = true;
-            Log.d("TEST", "PLAY FROM START");
         }
+
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer arg0) {
-                Log.d("TEST", "PLAYBACK FINISHED");
                 playPauseButton.setImageResource(R.drawable.play_48);
                 isPlaying = false;
             }
@@ -262,7 +260,6 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
             isPlaying = false;
             isPaused = false;
             playPauseButton.setImageResource(R.drawable.play_48);
-            Log.d("TEST", "STOP PLAYBACK");
             setMediaPlayer();
         }
     }
@@ -278,7 +275,6 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         final String newName = fileNameEditText.getText().toString();
         if (!(newName+".3gpp").equals(fileNameTextView.getText()) && newName!=null) {
             new AlertDialog.Builder(this)
-                    .setTitle("Rename file?")
                     .setMessage("Rename this recording to \"" + newName + " \"?")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

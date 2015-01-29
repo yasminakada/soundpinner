@@ -7,4 +7,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_listen">ListenActivity</string>
 
+    <string name="rename_dialog_message2">Rename this recording:</string>
+
 </resources>

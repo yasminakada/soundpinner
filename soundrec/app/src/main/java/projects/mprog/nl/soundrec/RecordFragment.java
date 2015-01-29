@@ -31,6 +31,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private MediaController mediaContoller;
     private String outputPath;
 
+    boolean isRecording = false;
+
     File file;
 
     Button recButton;
@@ -64,20 +66,22 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.recordButton){
             try {
-                if (recButton.getText().equals("RECORD"))
-                    beginRecording();
-                else if (recButton.getText().equals("STOP"))
+                if (isRecording)
+                  startRecording();
+                else
                     stopRecording();
             } catch (Exception e) {
-                Log.d("TEST", "--Exception Recording caught. :" + e.getMessage());
+                Log.d("TEST", "Caught exception - startRecording/stopRecording - " + e.getMessage());
             }
         }
     }
 
-    private void beginRecording() throws IOException {
+    private void startRecording() throws IOException {
         clearMediaRecorder();
         outputPath = FileUtilities.getOutputPath();
         file = new File(outputPath);
+
+        isRecording = true;
 
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -97,18 +101,11 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         chronometer.start();
 
         //button bg change
-        recButton.setText("STOP");
         recButton.setBackgroundResource(R.drawable.mic_circle_red_256);
 
         FragmentManager manager = getActivity().getSupportFragmentManager();
         dialog = new RenameDialogFragment();
-        Log.d("TEST",file.getAbsolutePath());
         dialog.setFile(file);
-    }
-
-    private void clearMediaRecorder() {
-        if (recorder != null)
-            recorder.release();
     }
 
     private void stopRecording() {
@@ -118,8 +115,13 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
         dialog.show(manager,"dialog");
 
-        recButton.setText("RECORD");
+        isRecording = false;
         recButton.setBackgroundResource(R.drawable.mic_circle_grey_256);
 
+    }
+
+    private void clearMediaRecorder() {
+        if (recorder != null)
+            recorder.release();
     }
 }

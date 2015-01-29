@@ -12,9 +12,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 /**
- * Created by yasmina on 28-1-2015.
+ * Yasmina Kada
+ * Programming Project 2015
+ * 10001567
  */
+
 public class BrowseListAdapter extends BaseAdapter {
     ArrayList<ListItem> list;
     Context context;
@@ -23,7 +27,7 @@ public class BrowseListAdapter extends BaseAdapter {
         context = c;
         list = new ArrayList<ListItem>();
         File[] files = ListUtilities.getAllFilesStored();
-        String[] fileNames = ListUtilities.getAllFilenames(files);
+        String[] fileNames = ListUtilities.getAllFileNames(files);
         String[] fileDurations = ListUtilities.getAllDurations(files);
         for (int i=0; i < files.length; i++)
         {

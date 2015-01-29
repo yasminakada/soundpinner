@@ -12,6 +12,7 @@ import java.util.Calendar;
  * Programming Project 2015
  * 10001567
  */
+
 public class FileUtilities {
 
     // Used to auto-generate unique filenames.
@@ -30,10 +31,11 @@ public class FileUtilities {
         return filename;
     }
 
+    // Returns the path of the main directory.
     public static String getMainDirectory(){
-        String dir = Environment.getExternalStorageDirectory()
+        String path = Environment.getExternalStorageDirectory()
                 + "/SoundPinner/";
-        return dir;
+        return path;
     }
 
     // Creates a new main directory when it does not exist.
@@ -67,11 +69,7 @@ public class FileUtilities {
         file.renameTo(newFile);
     }
 
-    public static void deleteFile(File file){
-        file.delete();
-    }
-
-    // Removes the ".3gpp" extention from a string.
+    // Removes the ".3gpp" extension from a string.
     public static String stripFilename(String filename){
         return filename.replace(".3gpp", "");
     }

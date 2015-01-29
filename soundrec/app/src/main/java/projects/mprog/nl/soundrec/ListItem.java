@@ -2,8 +2,11 @@ package projects.mprog.nl.soundrec;
 
 import java.io.File;
 
+
 /**
- * Created by yasmina on 28-1-2015.
+ * Yasmina Kada
+ * Programming Project 2015
+ * 10001567
  */
 
 public class ListItem{

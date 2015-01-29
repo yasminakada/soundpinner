@@ -7,18 +7,22 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
+
 /**
- * Created by yasmina on 28-1-2015.
+ * Yasmina Kada
+ * Programming Project 2015
+ * 10001567
  */
+
 public class ListUtilities {
     public static File[] getAllFilesStored(){
-        String path = Environment.getExternalStorageDirectory()+"/SoundPinner";
+        String path = FileUtilities.getMainDirectory();
 
         File f = new File(path);
-        File file[] = f.listFiles();
+        File[] file = f.listFiles();
         return file;
     }
-    public static String[] getAllFilenames(File[] file){
+    public static String[] getAllFileNames(File[] file){
         String[] filenameArray = new String[file.length];
         for (int i=0; i < file.length; i++)
         {
@@ -46,27 +50,19 @@ public class ListUtilities {
     }
 
     public static String getDurationText(int duration){
-        int seconds = 0;
-        int minutes = 0;
-        int hours = 0;
-        int totalSeconds = 0;
-        String secondsStr;
-        String minutesStr;
-        String hoursStr;
-
-        totalSeconds = duration / 1000;
-        seconds = totalSeconds % 60;
-        minutes = (totalSeconds /60) % 60;
-        hours = totalSeconds / (60 * 60);
-        secondsStr = ""+seconds;
-        minutesStr = ""+minutes;
-        hoursStr = ""+hours;
+        int totalSeconds = duration / 1000;
+        int seconds = totalSeconds % 60;
+        int minutes = (totalSeconds /60) % 60;
+        int hours = totalSeconds / (60 * 60);
+        String secondsStr = ""+seconds;
+        String minutesStr = ""+minutes;
+        String hoursStr = ""+hours;
 
         if (seconds < 10) secondsStr = "0"+seconds;
         if (minutes < 10) minutesStr = "0"+ minutes;
         if (hours < 10) hoursStr = "0"+ hours;
         String durationString =  hoursStr + ":" + minutesStr + ":" + secondsStr;
-        Log.d("TEST", "DURATION FORMATTED: " + durationString);
+
         return durationString;
     }
 }

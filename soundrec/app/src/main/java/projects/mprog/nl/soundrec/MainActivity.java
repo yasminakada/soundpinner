@@ -10,15 +10,17 @@ import android.support.v4.app.FragmentTabHost;
  * Programming Project 2015
  * 10001567
  */
+
 public class MainActivity extends FragmentActivity{
     // Fragment TabHost as mTabHost
     private FragmentTabHost mTabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FileUtilities.createMainDirectory();
 
         Resources res = getResources();
 
