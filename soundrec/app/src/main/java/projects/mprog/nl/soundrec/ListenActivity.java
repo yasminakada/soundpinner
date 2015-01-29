@@ -106,7 +106,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
 
     public void seekUpdate() {
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runnable, 250);
     }
 
     // getting views from xml
