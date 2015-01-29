@@ -7,28 +7,27 @@
     tools:context="projects.mprog.nl.soundrec.ListenActivity">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:gravity="center"
         android:id="@+id/linearTop" >
 
-        <FrameLayout
-            android:id="@+id/realtabcontent"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageDelete"
+            android:layout_gravity="left|top"
+            android:src="@drawable/trash_32"
+            android:paddingLeft="40dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Dummie text"
-                android:id="@+id/fileNameTextView"
-                android:layout_gravity="center" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <EditText
                 android:layout_width="wrap_content"
@@ -40,24 +39,25 @@
                 android:inputType="textNoSuggestions"
                 android:maxLength="24"
                 android:imeOptions="actionDone"
+                android:layout_gravity="center|top" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Dummie text"
+                android:id="@+id/fileNameTextView"
                 android:layout_gravity="center" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageEdit"
-                android:layout_gravity="center_horizontal|top"
-                android:src="@drawable/edit_32" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageDelete"
-                android:layout_gravity="left|top"
-                android:src="@drawable/trash_32"
-                android:paddingLeft="40dp" />
 
         </FrameLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageEdit"
+            android:layout_gravity="center_horizontal|top"
+            android:src="@drawable/edit_32" />
+
 
 
     </LinearLayout>

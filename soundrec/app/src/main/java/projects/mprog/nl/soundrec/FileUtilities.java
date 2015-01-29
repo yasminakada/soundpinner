@@ -57,16 +57,20 @@ public class FileUtilities {
 
     // Handles renaming of files. Checks for files so no file will be overwritten with the same name.
     public static void renameFile(File file, String newName){
+        String oldName = stripFilename(file.getName());
         String newNameExtended = newName + ".3gpp";
         File newFile = new File(file.getParent(),newNameExtended);
-        if (newFile.exists()){
+
+        if (newFile.exists() && !newName.equals(oldName)){
             int counter = 1;
             while(newFile.exists()){
                 newFile = new File(file.getParent(),newName +"(" + counter + ")" + ".3gpp");
                 counter++;
+
             }
+            file.renameTo(newFile);
         }
-        file.renameTo(newFile);
+        else if (!newFile.exists() && !newName.equals("")) file.renameTo(newFile);
     }
 
     // Removes the ".3gpp" extension from a string.

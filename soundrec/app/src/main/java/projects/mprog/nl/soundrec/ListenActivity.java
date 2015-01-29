@@ -34,7 +34,7 @@ import java.io.IOException;
 
 public class ListenActivity extends Activity implements View.OnClickListener,TextView.OnEditorActionListener {
 
-    String path = Environment.getExternalStorageDirectory() + "/SoundPinner/";
+    String path = FileUtilities.getMainDirectory();
     String fileName;
     File file;
 
@@ -62,6 +62,7 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         setContentView(R.layout.activity_listen);
 
         fileName = getIntent().getExtras().getString("fileName");
+        Log.d("TEST",fileName);
         file = new File(path + fileName);
         findViews();
         setAllOnClickListeners();
@@ -312,7 +313,6 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
     }
 
     private void deleteFile(){new AlertDialog.Builder(this)
-            .setTitle("Delete recording")
             .setMessage("Are you sure you want to delete this recording: " + fileName + " ?")
             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {

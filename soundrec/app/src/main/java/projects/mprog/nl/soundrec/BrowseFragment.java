@@ -77,7 +77,7 @@ public class BrowseFragment extends Fragment implements AdapterView.OnItemClickL
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         TextView tv = (TextView) view.findViewById(R.id.fileName);
-        String fileName = (String) tv.getText();
+        String fileName = (String) tv.getText() + ".3gpp";
 
         Intent i = new Intent(getActivity(), ListenActivity.class);
         Bundle bundle = new Bundle();

@@ -25,10 +25,7 @@ import java.io.IOException;
  */
 
 public class RecordFragment extends Fragment implements View.OnClickListener {
-    private boolean isTimerRunning = false;
     private MediaRecorder recorder;
-    private MediaPlayer mediaPlayer;
-    private MediaController mediaContoller;
     private String outputPath;
 
     boolean isRecording = false;
@@ -66,12 +63,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.recordButton){
             try {
-                if (isRecording)
+                if (!isRecording)
                   startRecording();
                 else
                     stopRecording();
             } catch (Exception e) {
-                Log.d("TEST", "Caught exception - startRecording/stopRecording - " + e.getMessage());
+                Log.d("TEST", "Caught exception - startRecording - " + e.getMessage());
             }
         }
     }
