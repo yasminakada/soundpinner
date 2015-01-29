@@ -15,7 +15,6 @@ import java.io.File;
  * Created by yasmina on 26-1-2015.
  */
 public class RenameDialogFragment extends DialogFragment {
-    String message = "Give this recording a name.";
     EditText editText;
     String oldFilename = "";
     File oldFile;

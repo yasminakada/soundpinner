@@ -276,10 +276,10 @@ public class ListenActivity extends Activity implements View.OnClickListener,Tex
         fileNameEditText.setVisibility(View.INVISIBLE);
         imm.hideSoftInputFromWindow(fileNameEditText.getWindowToken(), 0);
         final String newName = fileNameEditText.getText().toString();
-        if (!newName.equals(fileNameTextView.getText())) {
+        if (!(newName+".3gpp").equals(fileNameTextView.getText()) && newName!=null) {
             new AlertDialog.Builder(this)
                     .setTitle("Rename file?")
-                    .setMessage("Are you sure you want to rename this recording to  " + newName + " ?")
+                    .setMessage("Rename this recording to \"" + newName + " \"?")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             FileUtilities.renameFile(file, newName);

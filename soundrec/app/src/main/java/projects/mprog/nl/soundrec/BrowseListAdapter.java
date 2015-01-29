@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by yasmina on 28-1-2015.
  */
-class BrowseListAdapter extends BaseAdapter {
+public class BrowseListAdapter extends BaseAdapter {
     ArrayList<ListItem> list;
     Context context;
 

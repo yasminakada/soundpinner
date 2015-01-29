@@ -46,14 +46,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="RECORD"
-                android:id="@+id/recordButton" />
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:padding="20dp"
-                android:text="LISTEN"
-                android:id="@+id/playBackButton" />
+                android:id="@+id/recordButton"
+                android:textStyle="bold"
+                android:textColor="#808080"/>
 
         </LinearLayout>
 

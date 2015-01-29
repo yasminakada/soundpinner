@@ -5,7 +5,8 @@ import java.io.File;
 /**
  * Created by yasmina on 28-1-2015.
  */
-class ListItem{
+
+public class ListItem{
     File file;
     String fileName;
     String fileDuration;

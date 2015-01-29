@@ -34,16 +34,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     File file;
 
     Button recButton;
-    Button playButton;
     Chronometer chronometer;
 
     FragmentManager manager;
     RenameDialogFragment dialog;
-
-    //TODO: All strings for setting a buttons text should be a constant/variable.
-    //TODO: When app is closed while recording, recording should stop/
-    // when onPause go on in background?
-    //
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,10 +54,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         recButton.setBackgroundResource(R.drawable.mic_circle_grey_256);
         recButton.setOnClickListener(this);
 
-        playButton = (Button) getActivity().findViewById(R.id.playBackButton);
-        playButton.setBackgroundResource(R.drawable.play_48);
-        playButton.setOnClickListener(this);
-
         chronometer = (Chronometer) getActivity().findViewById(R.id.chronometer);
 
         manager = getActivity().getSupportFragmentManager();
@@ -72,28 +62,15 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.recordButton:
-                try {
-                    if (recButton.getText().equals("RECORD"))
-                        beginRecording();
-                    else if (recButton.getText().equals("STOP"))
-                        stopRecording();
-                } catch (Exception e) {
-                    Log.d("TEST", "--Exception Recording caught. :" + e.getMessage());
-                }
-                break;
-            case R.id.playBackButton:
-                try {
-                    if (playButton.getText().equals("LISTEN"))
-                        playRecording();
-                    else if (playButton.getText().equals("STOP"))
-                        stopPlayback();
-                } catch (Exception e) {
-                    Log.d("TEST", "--Exception playRecording caught. :" + e.getStackTrace());
-                }
-                break;
+        if (v.getId() == R.id.recordButton){
+            try {
+                if (recButton.getText().equals("RECORD"))
+                    beginRecording();
+                else if (recButton.getText().equals("STOP"))
+                    stopRecording();
+            } catch (Exception e) {
+                Log.d("TEST", "--Exception Recording caught. :" + e.getMessage());
+            }
         }
     }
 
@@ -144,45 +121,5 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         recButton.setText("RECORD");
         recButton.setBackgroundResource(R.drawable.mic_circle_grey_256);
 
-    }
-
-    private void playRecording() throws IOException {
-        clearMediaPlayer();
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setDataSource(outputPath);
-        mediaPlayer.prepare();
-
-        mediaPlayer.start();
-        playButton.setText("STOP");
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        chronometer.start();
-        playButton.setBackgroundResource(R.drawable.stop_48);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer arg0) {
-                playButton.setText("LISTEN");
-                chronometer.stop();
-                playButton.setBackgroundResource(R.drawable.play_48);
-            }
-        });
-
-    }
-
-    private void clearMediaPlayer() {
-        if (mediaPlayer != null) {
-            try {
-                mediaPlayer.release();
-            } catch (Exception e) {
-                Log.d("TEST", "--Exception clear mediaplayer caught. :" + e.getMessage());
-            }
-        }
-    }
-
-    private void stopPlayback() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            playButton.setText("LISTEN");
-            chronometer.stop();
-        }
     }
 }

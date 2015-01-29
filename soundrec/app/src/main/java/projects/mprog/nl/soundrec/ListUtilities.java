@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by yasmina on 28-1-2015.
  */
-class ListUtilities {
+public class ListUtilities {
     public static File[] getAllFilesStored(){
         String path = Environment.getExternalStorageDirectory()+"/SoundPinner";
         Log.d("FILES", "Path: " + path);

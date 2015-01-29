@@ -1,17 +1,9 @@
 package projects.mprog.nl.soundrec;
 
-import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentTransaction;
-import android.view.Display;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 /**
  * Yasmina Kada
@@ -26,7 +18,7 @@ public class MainActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         Resources res = getResources();
 
